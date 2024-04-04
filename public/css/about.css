@@ -1,0 +1,160 @@
+:root {
+    --text-color-charcol : #36454F;
+    --btn-color : #1768AC;
+  }
+  
+  body {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      color: black;
+      background-image: linear-gradient(to right top, #fbeaff, #ededff, #dcf2ff, #ccf7ff, #c3faff, #c3faff, #c3faff, #c3faff, #ccf7ff, #dcf2ff, #ededff, #fbeaff);
+      
+  }
+ 
+    
+  .header{
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      padding: 10px;
+      color: black;
+  }
+  
+  header .nav a h4 {
+    color: var(--text-color-charcol);
+  }
+  
+  
+  
+   
+  .section p{
+    font-size: larger;
+  }
+  
+  li{
+    font-size: larger;
+  }
+  
+  
+  .section{
+      flex-grow: 1;
+      background-size: cover;
+      background-position: center;
+      display: flex;;
+      width: 100%;
+      height: 85%;
+      flex-direction: column;
+      justify-content: start;
+      /* align-items: center; */
+      overflow-y:auto;
+      position: relative;
+  }
+   
+  a{
+      text-decoration: none;
+      margin-right: 15px;
+  }
+   
+  .footer{
+      display: flex;
+      width: 100%;
+      /* height: 5%; */
+      justify-content: center;
+      align-items: center;
+      padding: 10px;
+  }
+  
+  .nav{
+      display: flex;
+      flex-direction: row;
+  }
+  
+  .contact-info{
+      display: flex;
+      flex-direction: row;
+  }
+ 
+  .contact-info p{
+    margin-right: 5px;
+  }
+  
+  
+  
+   .nav{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+   }
+  
+  
+   .logo{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 15px;
+   }
+  
+  
+  
+  
+  /*========== Responsive typography ==========*/
+  @media screen and (min-width: 1120px) {
+    :root {
+      --h2-font-size: 1.5rem;
+      --small-font-size: .875rem;
+    }
+  }
+  
+  /*=============== BASE ===============*/
+  * {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+  }
+  .profile {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 15px;
+    font-size: 18px;
+    flex-direction: column;
+    position: relative
+  }
+   
+   
+   
+  .profile_logo {
+    width: 100%;
+    height: 100%;
+    /* width: 75px;
+    height: 75px; */
+    object-fit: cover;
+    cursor: pointer;
+    /* margin-top: 40px; */
+  }
+   
+  .dropdown {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    padding: 10px;
+    z-index: 1;
+  }
+   
+  .profile:hover .dropdown {
+    display: flex;
+  }
+  .circle{
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    overflow: hidden;
+  }
+  
+  

@@ -1,0 +1,161 @@
+:root {
+  --text-color-charcol : #36454F;
+  --btn-color : #1768AC;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+.contact-info{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.flight-container {
+    /* max-width: 1200px; */
+    width: 500px;
+    margin: 20px auto;
+    padding: 20px;
+    /* border: 1px solid #ccc; */
+    /* border-radius: 5px; */
+    /* background-color: #c6e6eb; */
+    background: rgba( 255, 255, 255, 0.1 );
+    box-shadow: 0 8px 10px 0 rgba( 31, 38, 135, 0.37 );
+    backdrop-filter: blur( 3.5px );
+    -webkit-backdrop-filter: blur( 3.5px );
+    border-radius: 10px;
+    border: 1px solid rgba( 255, 255, 255, 0.18 );
+}
+.flight-info {
+    margin-bottom: 20px;
+    /* background-color: rgb(186, 227, 232); */
+    color: var(--text-color-charcol);
+}
+.passenger-form {
+    margin-bottom: 20px;
+}
+.passenger-form input[type="text"] {
+    width: 100%;
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+.confirm-button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: #fff;
+    cursor: pointer;
+    font-size: 16px;
+    text-align: center;
+}
+.confirm-button:hover {
+    background-color: #0056b3;
+}
+h2{
+  padding: 50px;
+  padding-left: 120px;
+}
+.flight-container div {
+  margin: 0;
+  border: 1px dashed white;
+  
+}
+.fdata{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  height: 70px;
+  align-items: center;
+}
+
+
+.key{
+  color: var(--text-color-charcol);
+  width:100px;
+  font-size: 20px;
+}
+.mid{
+  width:100px;
+  font-size: 20px;
+}
+.value{
+  color: var(--text-color-charcol);
+  width:100px;
+  font-size: 20px;
+}
+.container {
+  width: 90%;
+  margin: 20px auto;
+  padding: 20px;
+  /* border: 1px solid #ccc;
+  border-radius: 5px; */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: rgba( 255, 255, 255, 0.1 );
+  box-shadow: 0 8px 10px 0 rgba( 31, 38, 135, 0.37 );
+  backdrop-filter: blur( 3.5px );
+  -webkit-backdrop-filter: blur( 3.5px );
+  border-radius: 10px;
+  border: 1px solid rgba( 255, 255, 255, 0.18 );
+}
+  .user-form {
+      margin-bottom: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 30px;
+  }
+
+  .user-form .cards {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+
+
+  .user-form .cards .card {
+    background: rgba( 255, 255, 255, 0.1 );
+    box-shadow: 0 8px 10px 0 rgba( 31, 38, 135, 0.37 );
+    backdrop-filter: blur( 3.5px );
+    -webkit-backdrop-filter: blur( 3.5px );
+    border-radius: 10px;
+    border: 1px solid rgba( 255, 255, 255, 0.18 );
+    padding: 10px 20px;
+    max-width: 350px;
+  }
+
+  .user-form input[type="text"],
+  .user-form input[type="number"],
+  .user-form select {
+      width: 100%;
+      margin-bottom: 10px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+  }
+  .confirm-button {
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      background-color: #007bff;
+      color: #fff;
+      cursor: pointer;
+      font-size: 16px;
+      text-align: center;
+      width: 10%;
+  }
+  .confirm-button:hover {
+      background-color: #0056b3;
+  }
+  label{
+    color: black;
+  }

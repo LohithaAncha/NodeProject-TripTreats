@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+   <html lang="en">
+   <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+      <link rel="stylesheet" href="/static/css/home.css">
+      <link rel="stylesheet" href="/static/css/ticket.css">
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+      <title>Ticket page</title>
+   </head>
+   <body>
+      <!-- <header class="header">
+         <div>
+           <img src="/static/assets/tt.svg" style="width: 130px ;height: auto;">
+         </div>
+         <div class="nav">
+             <a href="/home"><h4>Home</h4></a>
+             <a href="/viewflights"><h4>Flights</h4></a>
+             <a href="/packages"><h4>Packages</h4></a>
+             <a href="/about"><h4>About</h4></a>
+             <a href="/logout"><h4>Logout</h4></a>
+         </div>
+     </header> -->
+     <%- include('header.ejs')%>
+      <section class="main">
+         <div style="width: 100%; display: flex; flex-direction: row; align-items: center;justify-content: center; padding-bottom: 20px;">
+            <button  id="downloadTicketBtn">Download Ticket</button>
+         </div>
+         
+         <% const userdata = decode %>
+         
+         <% const flightdata= flightinfo %>
+         <div id="ticket">
+            <!-- airplane detail -->
+            <div id="flight-details">
+                <div>
+                  <img src="/static/assets/fimage.png">
+                  <p><%= flightdata.Airline%></p>
+                </div>
+                <div id="gate-details">
+                  <div class="flightId">
+                     <p>Flight Id</p>
+                     <p><%= flightdata.flightNumber%></p>
+                  </div>
+                  <div>
+                     <p>Gate</p>
+                     <p>18A</p>
+                  </div>
+                </div>
+            </div>
+            <!-- from to details -->
+            <div id="from-to">
+               <div class="from">
+                  <p>From</p>
+                  <h3><%= flightdata.Source%></h3>
+               </div>
+               <div>
+                  <img src="/static/assets/fimage.png">
+               </div>
+               <div class="to">
+                  <p>To</p>
+                  <h3><%= flightdata.Destination%></h3>
+               </div>
+               
+            </div>
+            <!-- passenger details -->
+            <div id="passenger">
+               <div class="travellers">
+                  <div>
+                     <p>Traveller</p>
+                     <h3><%= userdata.length%></h3>
+                  </div>
+                  <div>
+                     <p>class</p>
+                     <h3>Economy</h3>
+                  </div>
+                  
+               </div>
+
+               <div class="passengerinfo">
+               <% for(let i=0;i<userdata.length;i++){ %>
+                  
+                     <div class="user">
+                        <div class="passname">
+                           <p>Passenger <%= i+1%></p>
+                         <h3 style="color: rgba(51, 137, 186, 0.614);"><%= userdata[i].name%></h3>
+                        </div>
+                        
+                     <div class="genage">
+                        <div >
+                           <p>Gender</p>
+                           <h3><%= userdata[i].gender%></h3>
+                           
+                        </div>
+                        <div>
+                           <p>Age</p>
+                           <h3><%= userdata[i].age%></h3>
+                        </div>
+                        
+                     </div>
+                     </div>
+             <%  } %>
+               
+                 
+               </div>
+            </div>
+            <!-- time and qr -->
+            <div id="time-QR">
+               <div class="datetime">
+                  <div class="day">
+                     <p>Date</p>
+                     <h3>28 Mar 2024</h3>
+                  </div>
+                  <div class="times">
+                     <div>
+                        <p>Arrival Time</p>
+                        <h3>9:30 PM</h3>
+                     </div>
+                     <div>
+                        <p>Departure Time</p>
+                        <h3>9:45 PM</h3>
+                     </div>
+                  </div>
+                  
+               </div>
+               <div id="qrCodeContainer"></div>
+            </div>
+         </div>
+      </section>
+      <%- include('footer') %> 
+   </body>
+   <script>
+      
+         const username = '<%= userProfile %>'
+         const flightSrcName = '<%= flightdata.Source %>'
+         const flightDesName = '<%= flightdata.Destination %>'
+         
+        document.getElementById('downloadTicketBtn').addEventListener('click', async () => {
+            downloadScreenshot();
+        });
+
+        // Function to generate ticket data (Replace with your actual implementation)
+
+
+      // function to generate screenshot of the ticket
+      function downloadScreenshot() {
+         html2canvas(document.getElementById('ticket')).then(function(canvas) {
+               let imageData = canvas.toDataURL('image/png');
+               $.ajax({
+                  method: 'POST',
+                  url: '/uploadToS3',
+                  data: { imageData, ticketName : `${username}-${flightSrcName}-${flightDesName}` },
+                  success: function(response) {
+                        console.log('Image uploaded successfully:', response);
+                  },
+                  error: function(xhr, status, error) {
+                        console.error('Error uploading image:', error);
+                  }
+               });
+
+               var link = document.createElement('a');
+               link.href = imageData;
+               link.download = 'ticket.png'; 
+               document.body.appendChild(link);
+               link.click();
+               document.body.removeChild(link);
+         });
+      }
+
+      let ticketJSON = '<%= JSON.stringify(decode) %>';
+      ticketJSON = ticketJSON.replace(/&#34;/g, "\'")
+
+
+
+      html2canvas(document.getElementById('ticket')).then((canvas) => {
+         imageData = canvas.toDataURL('image/png');
+         const qrCodeContainer = document.getElementById('qrCodeContainer');
+         const qrCode = new QRCode(qrCodeContainer, {
+            text: ticketJSON,
+            width: 128,
+            height: 128,
+            colorDark: '#000000',
+            colorLight: '#ffffff',
+            correctLevel: QRCode.CorrectLevel.H // Choose error correction level
+         });
+      })
+
+      // Generate QR code
+
+      
+      
+      
+   </script>
+    <script src="https://sdk.amazonaws.com/js/aws-sdk-2.955.0.min.js"></script>
+   <script src="static/js/test.js"></script>
+</html>

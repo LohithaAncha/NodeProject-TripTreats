@@ -1,0 +1,48 @@
+{
+  "name": "project",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha ./testing/*.spec.js --timeout 8000 --exit",
+    "dev": "nodemon server.js",
+    "coverage": "nyc --reporter=html --reporter=text mocha testing/*.spec.js --timeout 5000 --exit"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "aws-sdk": "^2.1588.0",
+    "axios": "^1.6.8",
+    "bcrypt": "^5.1.1",
+    "body-parser": "^1.20.2",
+    "chai-http": "^4.4.0",
+    "cookie-parser": "^1.4.6",
+    "dotenv": "^16.4.5",
+    "ejs": "^3.1.9",
+    "express": "^4.18.3",
+    "flight-data": "^2.0.3",
+    "hbs": "^4.2.0",
+    "html2canvas": "^1.4.1",
+    "jsonwebtoken": "^9.0.2",
+    "mongodb": "^6.4.0",
+    "mongoose": "^8.2.0",
+    "multer": "^1.4.5-lts.1",
+    "nodemailer": "^6.9.13",
+    "nodemon": "^3.1.0",
+    "proxyquire": "^2.1.3",
+    "qrcode": "^1.5.3",
+    "razorpay": "^2.9.2",
+    "unirest": "^0.6.0"
+  },
+  "devDependencies": {
+    "chai": "^4.3.6",
+    "chai-as-promised": "^7.1.1",
+    "mocha": "^10.4.0",
+    "nyc": "^15.1.0",
+    "rewire": "^7.0.0",
+    "sinon": "^17.0.1",
+    "sinon-chai": "^3.7.0",
+    "supertest": "^6.3.4"
+  }
+}

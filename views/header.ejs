@@ -1,0 +1,30 @@
+<header class="header">
+    <div>
+      <img src="/static/assets/tt.svg" style="width: 130px ;height: auto;">
+    </div>
+    <div class="nav">
+      <% if(data=="admin"){ %>
+        <a href="/addflights"><h4>Add flights</h4></a>
+      <% } %>  
+        <a href="/home"><h4>Home</h4></a>
+        <a href="/viewflights"><h4>Flights</h4></a>
+        <!-- <a href="/packages"><h4>Packages</h4></a> -->
+        <a href="/about"><h4>About</h4></a>
+        <!-- <a href="/logout"><h4>Logout</h4></a> -->
+        <div class="profile">
+          <div class="circle"><img class="profile_logo" src="/static/assets/maleicon.png"></div>
+          <div class="dropdown">
+            <div class="logoutimage">
+              <img src="/static/assets/profileicon.svg" >
+              <a href="/profile">PROFILE</a>
+            </div>
+                          
+              <div class="logoutimage">
+                <img src="/static/assets/logout.jpeg">
+                <a href="/logout">LOGOUT</a>
+              </div>
+              
+          </div>
+      </div>
+    </div>
+</header>

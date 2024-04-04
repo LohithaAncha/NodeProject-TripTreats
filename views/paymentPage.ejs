@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TripTreats</title>
+    <link rel="stylesheet" href="/static/css/home.css">
+    <link rel="stylesheet" href="/static/css/test.css">
+</head>
+ 
+ 
+<body>
+    <header class="header">
+        <div class="logo">
+          <h1>Trip Treats</h1>
+      </div>
+      <div class="nav">
+        <% if(data.user=="admin"){ %>
+            <a href="/addflights"><h4>Add flights</h4></a>
+          <% } %>  
+          <a href="/home"><h4>Home</h4></a>
+          <a href=""><h4>Flights</h4></a>
+          <!-- <a href="/packages"><h4>Packages</h4></a> -->
+          <a href="/about"><h4>About</h4></a>
+          <a href="/logout"><h4>Logout</h4></a>
+              
+      </div>
+      <div class="profile">
+        <div class="circle"><img class="profile_logo" src="/static/assets/profileicon.svg"></div>
+        <div class="dropdown">
+            <a href="/profile">PROFILE</a>
+            <!-- <a href="/leaderBoard">LEADER_BOARD</a>
+            <a href="/changeProfile">PROFILE_PHOTO</a> -->
+            <a href="/logout">SIGNOUT</a>
+ 
+        </div>
+    </div>
+      </header>
+
+ 
+    <section class="section">
+    <!-- payment.ejs -->
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script src="/static/js/paymentPage.js"></script>
+<script>
+    var orderId = '<%= orderId %>';
+
+
+
+    var options = {
+        key: 'rzp_test_2htBzQ0KJgp3Tx',
+        amount: '<%= fly.price %>'*100*'<%= users%>' ,
+        currency: 'INR',
+        name: '<%= fly.Airline %>',
+        description: 'Payment for flight ticket',
+        order_id: orderId,
+        handler: function(response) {
+            callFunction();
+            // Handle successful payment (e.g., redirect to thank you page)
+        },
+        prefill: {
+            name: 'Customer Name',
+            email: 'customer@example.com',
+            contact: '9392635957'
+        },
+        notes: {
+            // Add any additional notes or metadata
+        },
+        theme: {
+            color: '#F37254'
+        }
+    };
+
+    var rzp = new Razorpay(options);
+    rzp.open();
+</script>
+
+
+    </section>
+    <%- include('footer') %>
+ 
+    
+</body>
+
+</html>
+ 

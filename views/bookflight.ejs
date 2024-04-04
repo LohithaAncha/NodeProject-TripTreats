@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TripTreats</title>
+    <link rel="stylesheet" href="/static/css/home.css">
+    <link rel="stylesheet" href="/static/css/bookFlight.css">
+</head>
+ 
+<body>
+    <%- include('header.ejs') %>
+ 
+    <section class="section">
+    <h1 class="user">Hello, <%= USER.name %></h1>
+    
+    <div class="flight-container">
+      <div class="flight-info">
+          <h2>Flight Information</h2>
+          
+          <div class="fdata">
+            <p class="key">Flight Name </p>
+            <p class="mid">:</p>
+            <p class="value"><%= Flight.Airline %></p>
+          </div>
+          <div class="fdata">
+            <p class="key">Flight Id</p>
+            <p class="mid">:</p>
+            <p class="value"><%= Flight.flightNumber%></p>
+          </div>
+          <div class="fdata">
+            <p class="key">Source</p>
+            <p class="mid">:</p>
+            <p class="value"><%= Flight.Source %></p>
+          </div>
+          <div class="fdata">
+            <p class="key">Destination</p>
+            <p class="mid">:</p>
+            <p class="value"><%= Flight.Destination %></p>
+          </div>
+          <div class="fdata">
+            <p class="key">Arrival Time</p>
+            <p class="mid">:</p>
+            <p class="value"><%= Flight.ScheduledArrivalTime%></p>
+            
+          </div>
+          <div class="fdata">
+            <p class="key">Departure</p>
+            <p class="mid">:</p>
+            <p class="value"><%= Flight.ScheduledDepartureTime %></p>
+          </div>
+          <div class="fdata">
+            <p class="key">Price per Ticket</p>
+            <p class="mid">:</p>
+            <p class="value"><%= Flight.price %></p>
+          </div>
+      </div>
+      </div>
+      <div class="container">
+        <h2>Enter the User Details</h2>
+        <form class="user-form" id=<%= count %>>
+          <div class="cards">
+            <%  for(let i = 0; i < count; i++) { %>
+              <div class="card">
+                <h3>User <%= i + 1 %></h3>
+                  <label for="name<%= i %>">Name</label>
+                  <input type="text" id="name<%= i %>" name="name<%= i %>" required>
+  
+                  <label for="age<%= i %>">Age</label>
+                  <input type="number" id="age<%= i %>" name="age<%= i %>" required>
+  
+                  <label for="gender<%= i %>">Gender</label>
+                  <select id="gender<%= i %>" name="gender<%= i %>" required>
+                      <option value="male">Male</option>
+                      <option value="female">Female</option>
+                      <option value="other">Other</option>
+                  </select>
+              </div>
+              <% } %>
+          </div>
+          <button type="submit" class="confirm-button" id=<%= Flight.flightNumber%>>Confirm Details</button>
+        </form>
+    </div>
+    
+    </section>
+    <%- include('footer') %>
+
+
+    
+</body>
+<script src="/static/js/bookflight.js"></script>
+</html>
+ 

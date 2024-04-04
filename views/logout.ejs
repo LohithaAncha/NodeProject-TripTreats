@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TripTreats-Logout</title>
+    <!-- Include your CSS directly or use a link to an external CSS file -->
+    <style>
+        /* Your CSS styles here */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+        
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo img {
+            height: 50px;
+        }
+        
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        nav ul li {
+            display: inline;
+            margin-left: 20px;
+        }
+        
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        
+        main {
+            padding: 20px;
+        }
+        
+        h1 {
+            color: #333;
+        }
+        
+        p {
+            color: #666;
+        }
+        
+        form {
+            margin-top: 20px;
+        }
+        
+        button {
+            padding: 10px 20px;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+        
+        button:hover {
+            background-color: #555;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <!-- <img src="logo.png" alt="Logo"> -->
+            <h1 style="color: #fff;">Trip Treats</h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="/home">Home</a></li>
+                <!-- You might want to link to other pages here -->
+            </ul>
+        </nav>
+    </header>
+    <main >
+        <h1 style="align-content: center; width: 100%; padding-left: 800px;">Logout</h1>
+        <p style="align-content: center; width: 100%; padding-left: 740px;">Are you sure you want to logout?</p>
+        <form action="/logout" method="POST" style="align-content: center; width: 100%; padding-left: 810px;">
+            <!-- Use a form to handle logout, or you can use AJAX -->
+            <button type="submit">Logout</button>
+        </form>
+    </main>
+</body>
+</html>

@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TripTreats</title>
+    <link rel="stylesheet" href="/static/css/home.css">
+    <link rel="stylesheet" href="/static/css/test.css">
+
+    <style>
+        .dropbtn {
+          background-color: #04AA6D;
+          color: white;
+          padding: 16px;
+          font-size: 16px;
+          border: none;
+          cursor: pointer;
+        }
+        
+        .dropbtn:hover, .dropbtn:focus {
+          background-color: #3e8e41;
+        }
+        
+        /* #myInput {
+          box-sizing: border-box;
+          font-size: 16px;
+          padding: 2px;
+          border: none;
+          border-bottom: 1px solid #ddd;
+        }
+        
+        #myInput:focus {outline: 3px solid #ddd;} */
+        
+        .dropdown1 {
+          position: relative;
+          display: inline-block;
+        }
+        
+        .dropdown1-content {
+          display: none;
+          position: absolute;
+          background-color: #f6f6f6;
+          min-width: 230px;
+          overflow: auto;
+          border: 1px solid #ddd;
+          z-index: 1;
+        }
+        
+        .dropdown1-content a {
+          color: black;
+          padding: 12px 16px;
+          text-decoration: none;
+          display: block;
+        }
+        
+        .dropdown1 a:hover {background-color: #ddd;}
+        
+        .show {display: block;}
+        </style>
+
+</head>
+
+<body>
+    <%- include('header.ejs') %>
+    <!-- <%= data.user %> -->
+    <section class="section">
+    <h1 class="user">Hello, <%= USER.name.toUpperCase() %></h1>
+    
+    <div id="search-form" class="search-form">
+      <form>
+          <!-- <input class='input' type="text" name="source" id="src" placeholder="Enter Source">
+          <div>
+            <ul class="list">
+
+            </ul>
+          </div> -->
+          <!-- <select name="Source" id="Source">
+            <option selected>Search Source</option>
+          </select> -->
+          
+          <div id="myDropdown" class="dropdown-content">
+            <input type="text" placeholder="Enter Source" class="input" id="myInput" autocomplete="off"  name='source' onkeyup="filterFunction()">
+           <div id="dropdownmenu">
+           </div>
+
+          </div>
+        <div id="destdropdown" class="dropdown-dest-content ">
+            <input class='input' type="text" name="destination" placeholder="Enter Destination" autocomplete="off" id="destinput" onkeyup="filterFunction()">
+           <div id="destdropdownmenu" class=""></div>
+        </div>
+
+          <input class="input" type="number" name="passenger" min='0' placeholder="Enter number of passengers">
+          <input  class='input' type="date" name="tripdate"><button type="submit">Search</button>
+      </form>
+  </div>  
+
+    <div id="flights"></div>
+
+    </section>
+    <%- include('footer') %> 
+
+    <script>
+      const src=document.getElementById('myInput')
+      const list=document.getElementById('dropdownmenu')
+      const des=document.getElementById('destinput')
+      const list1=document.getElementById('destdropdownmenu')
+      src.addEventListener('input',async () => {
+        list1.style.display = 'none';
+        if(src.value === '') {
+          list.style.display = 'none';
+        }
+        list.style.display="block"
+        const response = await fetch(`/search?term=${src.value}`, {
+          method : 'GET',
+          headers : {
+            'Content-Type': 'application/json',
+          }
+        })
+        
+        const responseData = await response.json();
+
+        if(src.value === '' || responseData.length <= 0) {
+          list.style.display = 'none';
+        }
+        
+        list.innerHTML = ''
+        responseData.forEach(option => {
+            const optionEle = document.createElement('p');
+            // optionEle.id = 'srcName';
+            optionEle.textContent = option._id;
+            list.appendChild(optionEle);
+        });
+      })
+
+
+        console.log('hello')
+
+        function filterFunction() {
+          var input, filter, ul, li, a, i;
+          input = document.getElementById("myInput");
+          filter = input.value.toUpperCase();
+          div = document.getElementById("myDropdown");
+          a = div.getElementsByTagName("a");
+          for (i = 0; i < a.length; i++) {
+            txtValue = a[i].textContent || a[i].innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+              a[i].style.display = "";
+            } else {
+              a[i].style.display = "none";
+            }
+          }
+        }
+
+        
+        
+        des.addEventListener('input',async () => {
+            if(des.value === '') {
+              list1.style.display = 'none';
+            }
+            list1.style.display = 'block'
+            const response = await fetch(`/search?term=${des.value}`, {
+                method : 'GET',
+                headers : {
+                    'Content-Type': 'application/json',
+                }
+            })
+
+            const responseData = await response.json();
+
+            list1.innerHTML = ''
+
+            // console.log(responseData)
+            if(des.value === '' || responseData.length <= 0) {
+              list1.style.display = 'none';
+            }
+
+            responseData.forEach(option => {
+                const optionEle = document.createElement('p');
+                optionEle.textContent = option._id;
+                list1.appendChild(optionEle);
+            });
+        })
+        function filterFunction() {
+          var input, filter, ul, li, a, i;
+          input = document.getElementById("destinput");
+          filter = input.value.toUpperCase();
+          div = document.getElementById("destdropdownmenu");
+          a = div.getElementsByTagName("a");
+          for (i = 0; i < a.length; i++) {
+            txtValue = a[i].textContent || a[i].innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+              a[i].style.display = "";
+            } else {
+              a[i].style.display = "none";
+            }
+          }
+        }
+
+
+        list.addEventListener('click', function(event) {
+            console.log(event.target.tagName);
+            if (event.target.tagName === 'P') {
+                const selectedText = event.target.textContent;
+                src.value = selectedText;
+                list.style.display = 'none';
+
+                // console.log('Selected text:', selectedText);
+            }
+        });
+        list1.addEventListener('click', function(event) {
+            console.log(event.target.tagName);
+            if (event.target.tagName === 'P') {
+                const selectedText = event.target.textContent;
+                des.value = selectedText;
+                list1.style.display = 'none';
+
+                // console.log('Selected text:', selectedText);
+            }
+        });
+        </script>
+</body>
+<script src="/static/js/home.js"></script>
+</html>
+ 
