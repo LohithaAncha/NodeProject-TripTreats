@@ -89,7 +89,7 @@ router.get('/profile',requireauth,getProfile)
 router.get('/search',search)
 
 const axios = require('axios');
-const { default: mongoose } = require('mongoose');
+const { default: mongoose, deleteModel } = require('mongoose');
 
                                                                                                                                                                                                          
 // router.get('/bookings',async(req,res)=>{
@@ -114,6 +114,50 @@ const { default: mongoose } = require('mongoose');
 //     }
 // })
 
+router.get('/profile/edit',requireauth,(req,res)=>{
+    
+    res.render('editProfile',{data:req.user.user});
+})
 
+router.post('/profile/edit', requireauth, async (req, res) => {
+    try {
+        const { name, age, gender, email, phone } = req.body;
+        const id = req.user.id; 
+        let user1 = await user.findById(id);
+        if (!user1) {
+            return res.status(404).send('User not found');
+        }
+        user1.name = name;
+        user1.age = age;
+        user1.gender = gender;
+        user1.email = email;
+        user1.phone = phone;
+        user1 = await user1.save();
+        const updatedUser=await user.findById(id);
+        res.render('profile',{data:req.user.user,user:updatedUser})
+    } catch (error) {
+        console.error('Error updating user details:', error);
+        res.status(500).send('Error updating user details');
+    }
+});
+
+router.post ('/profile/delete',requireauth,async(req,res)=>{
+        try {
+            const id=req.user.id;
+            let user1=await user.findById(id);
+            if(!user1){
+                return res.status(404).send("User not found");
+            }
+            
+            const deleted=await user.findByIdAndDelete(id);
+            res.cookie('jwt','',{maxAge: 1});
+            res.sendStatus(204); 
+        } catch (error) {
+            console.error('Error deleting user details:', error);
+            res.status(500).send('Error deleting user details');
+        }
+    
+
+})
 
 module.exports=router

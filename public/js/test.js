@@ -8,10 +8,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     // console.log('Received Data:Data', dataReceived , "flightid: ", dataReceived[0].Fid);
     try{
         const fid = dataReceived[0].Fid;
+        const Fsource=dataReceived[0].fsrc;
+        const Fdes=dataReceived[0].fdes
         // console.log("asdfghjkllasdfghjkl/n/n/n/n/n/masdfg")
         const res=await fetch('/confirmuserdetails',{
             method:'post',
-            body:JSON.stringify({dataReceived:dataReceived,fid:fid}),
+            body:JSON.stringify({dataReceived:dataReceived,fid:fid,Fsrc:Fsource,Fdest:Fdes}),
             headers:{'Content-Type':'application/json'}
         });
         const data=await res.json();

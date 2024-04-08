@@ -121,8 +121,10 @@ const showticket=async (req,res)=>{
             const jsonData = req.query.data;
             let decode = decodeURIComponent(jsonData);
             decode=JSON.parse(decode);
-           // console.log("decode",decode)
-            const flightinfo=await flight.findOne({flightNumber:decode[0].Fid});
+            console.log("decode",decode)
+
+            const flightinfo=await flight.findOne({flightNumber:decode[0].Fid,Source:decode[0].fsrc,Destination:decode[0].fdeso});
+            console.log("flight:",flightinfo)
             sendMailtoUser(userData.email, {decode, flightinfo});
             res.render("test",{decode,flightinfo,data : req.user.user, userProfile : userData.name});   
             } catch (error) {

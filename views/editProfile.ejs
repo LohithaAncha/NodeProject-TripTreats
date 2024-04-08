@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/static/css/home.css">
+    <link rel="stylesheet" href="/static/css/editProfile.css"
+</head>
+<body>
+    <%- include('header.ejs') %>
+    <section class="section">
+    <div class="editform">
+        <div>
+            <h1>Edit Profile</h1>
+        </div>
+        <div>
+            <form action="/profile/edit" method="post">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" value = '1'><br>
+                <label for="age">Age:</label>
+                <input type="number" id="age" name="age" ><br>
+                <label for="gender">Gender:</label>
+                <input type="text" id="gender" name="gender" ><br>
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" ><br>
+                <label for="phone">Phone:</label>
+                <input type="text" id="phone" name="phone" ><br>
+                <button type="submit">Save Changes</button>
+              </form>
+        </div>
+    </div>
+    
+
+    </section>
+    <%- include('footer.ejs') %>
+    <script>
+        
+    </script>
+    <script src="/static/js/editProfile.js"></script>
+   
+</body>
+</html>
