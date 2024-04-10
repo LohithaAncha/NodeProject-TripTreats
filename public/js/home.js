@@ -1,13 +1,15 @@
 const form = document.querySelector('form')
 let passengers;// console.log(form.email.value)
 const searchForm = document.getElementById('search-form')
+let date
 form.addEventListener('submit',async(e)=>{
     e.preventDefault()
     const source = form.source.value;
     const destination = form.destination.value;
     passengers = form.passenger.value;
-    const date = form.tripdate.value;
-    
+   
+    date=form.tripdate.value;
+    console.log("date2:",date)
     try{
         const res = await fetch('/findFlights',{
             method: 'post',
@@ -80,7 +82,7 @@ function displayFlight(data){
             const paramValue = passengers+data.flights[i].flightNumber;
             const src = data.flights[i].Source;
             const des = data.flights[i].Destination;
-            const url = `/bookflight/${paramValue}/${src}/${des}`;
+            const url = `/bookflight/${paramValue}/${src}/${des}/${date}`;
             window.location.href = url;
         })
         card__data.appendChild(button);

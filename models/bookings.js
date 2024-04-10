@@ -10,22 +10,20 @@ const bookingSchema = new mongoose.Schema({
         ref: 'flights', 
         required: true
     },
-    passengerIds: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'passenger' 
-    }],
-    dateOfBooking: {
-        type: Date,
-        required: true
-    },
+    
     numberOfPassengers: {
         type: Number,
         required: true
     },
-    dateOfJourney: {
-        type: Date,
-        required: true
+   
+    dateOfJourney:{
+        type:Date,
+        required:true
     },
+    uuid:{
+        type:String,
+        required:true
+    }
     
 });
 const booking = mongoose.model('booking', bookingSchema);

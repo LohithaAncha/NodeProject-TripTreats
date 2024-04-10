@@ -4,12 +4,90 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bookings</title>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <link rel="stylesheet" href="/static/css/home.css">
+    <link rel="stylesheet" href="/static/css/bookings.css">
 </head>
 <body>
     <%- include('header.ejs')%>
-
+    <% const previous=previousbookings %>
+    <% const flightsprev=flightsprevious %>
+    <% const upcoming=upcomingflights %>
+    <% const flightsup=flightsupcoming %>
     <section class="section">
-    
+        <div class="data">
+            <h1>Upcoming Flights</h1>
+            <div class="upcoming">
+                <% for(let i=0;i< upcoming.length;i++){ %>
+                    <div class="container">
+                        <div>
+                            <div>
+                                <p class="title"><%= flightsup[i].Airline%></p>
+                            </div>
+                            <div class="flight-details">
+                                <div class="flight-landing">
+                                    <p><%= flightsup[i].Source%></p>
+                                    <span class="material-symbols-outlined">
+                                        arrow_forward_ios
+                                        </span>
+                                    <p><%= flightsup[i].Destination %></p>
+                                </div>
+                                <p><%= upcoming[i].dateOfJourney%></p>
+                            </div>
+                        </div>
+                        <div class="viewBtnDiv">
+                           <button><a href= <%= upcoming[i].uuid %>> view </a></button> 
+                        </div>
+                    </div>
+                    <!-- <div class="eachupcoming">
+                      <p>Date of Journey:</p>
+                      <h3><%= upcoming[i].dateOfJourney %></h3>
+                    </div>
+                    <div class="eachupcoming">
+                      <p>Source</p>
+                      <h3><%= flightsup[i].Source%></h3>
+                    </div>
+                    <div class="eachupcoming">
+                      <p>Destination</p>
+                      <h3><%= flightsup[i].Destination %></h3>
+                    </div>
+                    <div class="eachupcoming">
+                      <p>Number of Passengers</p>
+                      <h3><%= upcoming[i].numberOfPassengers %></h3>
+                    </div>
+                    <div class="eachupcoming">
+                      <p>Flight Name</p>
+                      <h3><%= flightsup[i].Airline%></h3>
+                    </div> -->
+                  <%} %>
+            </div>
+            <h1>Previous Bookings</h1>
+            <div class="previous">
+                <% for(let i=0;i< previous.length;i++){ %>
+                    <div class="container">
+                        <div>
+                            <div>
+                                <p class="title"><%= flightsprev[i].Airline%></p>
+                            </div>
+                            <div class="flight-details">
+                                <div class="flight-landing">
+                                    <p><%= flightsprev[i].Source%></p>
+                                    <span class="material-symbols-outlined">
+                                        arrow_forward_ios
+                                        </span>
+                                    <p><%= flightsprev[i].Destination %></p>
+                                </div>
+                                <p><%= previous[i].dateOfJourney %></p>
+                            </div>
+                        </div>
+                        <div class="viewBtnDiv">
+                            <button>view</button>
+                        </div>
+                    </div>
+                <%} %>
+            </div>
+            
+        </div>
     </section>
     
     <%- include("footer.ejs")%>

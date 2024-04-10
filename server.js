@@ -48,7 +48,7 @@ const uploads3=(req, res) => {
     // Upload image to S3
     const params = {
         Bucket: 'triptreats',
-        Key: `${fileName}.jpg`,
+        Key: `${fileName}`,
         Body: imageBuffer,
         ContentType: 'image/jpeg'
     };

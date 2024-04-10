@@ -138,6 +138,7 @@
          const username = '<%= userProfile %>'
          const flightSrcName = '<%= flightdata.Source %>'
          const flightDesName = '<%= flightdata.Destination %>'
+         const uuid=`<%= uuid %>`
          
         document.getElementById('downloadTicketBtn').addEventListener('click', async () => {
             downloadScreenshot();
@@ -150,17 +151,7 @@
       function downloadScreenshot() {
          html2canvas(document.getElementById('ticket')).then(function(canvas) {
                let imageData = canvas.toDataURL('image/png');
-               $.ajax({
-                  method: 'POST',
-                  url: '/uploadToS3',
-                  data: { imageData, ticketName : `${username}-${flightSrcName}-${flightDesName}` },
-                  success: function(response) {
-                        console.log('Image uploaded successfully:', response);
-                  },
-                  error: function(xhr, status, error) {
-                        console.error('Error uploading image:', error);
-                  }
-               });
+               
 
                var link = document.createElement('a');
                link.href = imageData;
@@ -187,6 +178,17 @@
             colorLight: '#ffffff',
             correctLevel: QRCode.CorrectLevel.H // Choose error correction level
          });
+         $.ajax({
+                  method: 'POST',
+                  url: '/uploadToS3',
+                  data: { imageData, ticketName : `${uuid}` },
+                  success: function(response) {
+                        console.log('Image uploaded successfully:', response);
+                  },
+                  error: function(xhr, status, error) {
+                        console.error('Error uploading image:', error);
+                  }
+               });
       })
 
       // Generate QR code

@@ -1,0 +1,60 @@
+.data {
+    padding: 0 50px;
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.data .previous, .data .upcoming {
+    border : 1px solid gray;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+
+.container {
+    border : 1px solid gray;
+    padding: 10px 20px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.container .title {
+    font-size: x-large;
+    font-weight: bold;
+    padding: 5px 0;
+}
+
+.flight-details {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 40px;
+}
+
+.flight-landing {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-items: center;
+}
+
+.flight-details p {
+    font-size: large;
+}
+
+.viewBtnDiv {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.viewBtnDiv > button {
+    padding: 10px 20px;
+    font-size: large;
+    font-weight: bold;
+}

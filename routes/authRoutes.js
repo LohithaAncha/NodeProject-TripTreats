@@ -8,7 +8,7 @@ const Passenger=require('../models/passenger');
 const Razorpay=require('razorpay');
 const { sendMailtoUser } = require('../services/mail');
 const bookings=require('../models/bookings')
-const { handlelogin, handleRegister, homepage, handleLogout, addflight, bookflight, viewflights, showticket, getabout,getPaymentpage, getProfile, search, createUser, addloggedinUser, createFlight, findflight, createPassenger, createPaymentOrder, sendwebhook } = require('../controllers/authcontrollers');
+const { handlelogin, handleRegister, homepage, handleLogout, addflight, bookflight, viewflights, showticket, getabout,getPaymentpage, getProfile, search, createUser, addloggedinUser, createFlight, findflight, createPassenger, createPaymentOrder, sendwebhook, getProfileEdit } = require('../controllers/authcontrollers');
 
 var razorpay = new Razorpay({
     key_id: process.env.key_id,
@@ -16,6 +16,15 @@ var razorpay = new Razorpay({
 
 });
 
+
+const AWS = require('aws-sdk');
+
+// Configure AWS SDK
+const s3 = new AWS.S3({
+  accessKeyId: process.env.aws_access_key,
+  secretAccessKey: process.env.aws_secret_key,
+  region: 'ap-south-1'
+});
 
 
 
@@ -52,7 +61,7 @@ router.post('/findFlights',requireauth,findflight)
 
 
 
-router.get('/bookflight/:id/:src/:des', requireauth,bookflight)
+router.get('/bookflight/:id/:src/:des/:date', requireauth,bookflight)
 
 router.post('/confirmuserdetails',requireauth,createPassenger)
 
@@ -92,32 +101,9 @@ const axios = require('axios');
 const { default: mongoose, deleteModel } = require('mongoose');
 
                                                                                                                                                                                                          
-// router.get('/bookings',async(req,res)=>{
-//     try {
-//         const userId = req.user.id; 
-//         const bookings = await Booking.find({ userId });
-//         res.render('bookings',{bookings});
-//     } catch (error) {
-//         res.status(500).json({ message: 'Internal server error' });
-//     }
-// })
-//  router.get('/bookings/:id',async (req, res) => {
-//     try {
-//         const bookingId = req.params.id;
-//         const booking = await Booking.findById(bookingId);
-//         if (!booking) {
-//             return res.status(404).json({ message: 'Booking not found' });
-//         }
-//         res.status(200).json({ booking });
-//     } catch (error) {
-//         res.status(500).json({ message: 'Internal server error' });
-//     }
-// })
 
-router.get('/profile/edit',requireauth,(req,res)=>{
-    
-    res.render('editProfile',{data:req.user.user});
-})
+
+router.get('/profile/edit',requireauth,getProfileEdit)
 
 router.post('/profile/edit', requireauth, async (req, res) => {
     try {
@@ -159,5 +145,50 @@ router.post ('/profile/delete',requireauth,async(req,res)=>{
     
 
 })
+
+router.get('/bookings',requireauth,async(req,res)=>{
+   const userid=req.user.id;
+   const bookinginfo=await bookings.find({userId:userid})
+   //console.log("found booking:",booking);
+   const currentDate=new Date();
+   const previousbookings=[];
+   const upcomingflights=[];
+   const flightsprevious=[];
+   const flightsupcoming=[];
+   for (const booking of bookinginfo) {
+    const date = new Date(booking.dateOfJourney);
+    const params = {
+        Bucket: 'triptreats',
+        Key: booking.uuid, 
+    };
+    const signedUrl = s3.getSignedUrl('getObject', params);
+    console.log(booking.uuid)
+    booking.uuid = signedUrl;
+    console.log(booking.uuid, signedUrl)
+    if (date < currentDate) {
+        previousbookings.push(booking);
+        const flightId = booking.flightId;       
+        const flightInfo = await flight.findById(flightId);       
+        flightsprevious.push(flightInfo);
+    }
+    else{
+        upcomingflights.push(booking);
+        const flightId = booking.flightId;       
+        const flightInfo = await flight.findById(flightId);       
+        flightsupcoming.push(flightInfo);
+    } 
+}
+
+
+
+//    previousbookings.sort((a,b)=>new Date(b.dateOfJourney)-new Date(a.dateOfJourney));
+//    upcomingflights.sort((a,b)=>new Date(a.dateOfJourney)-new Date(b.dateOfJourney))
+//     console.log("previous:",previousbookings);
+//    console.log("upcoming:",upcomingflights)
+
+   res.render("bookings",{previousbookings:previousbookings,upcomingflights:upcomingflights,data:req.user.user,flightsprevious:flightsprevious,flightsupcoming:flightsupcoming});
+
+})
+
 
 module.exports=router

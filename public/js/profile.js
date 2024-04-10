@@ -22,8 +22,7 @@ dltbtn.addEventListener('click',async (e)=>{
 
             if (response.ok) {
                 console.log("deleted")
-                
-                
+                                
                 window.location.href = '/login';
             } else {
                 console.error('Error deleting user:');

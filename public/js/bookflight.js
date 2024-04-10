@@ -7,6 +7,8 @@ const fsrc=flightdata.Source;
 const fdes=flightdata.Destination;
 console.log("Flight data=",fsrc)
 console.log("Flight data=",fdes)
+console.log("Flight date=",doj)
+let dateofjourney=doj;
 form.addEventListener('submit',async(e)=>{
     e.preventDefault();
     // try {
@@ -24,7 +26,7 @@ form.addEventListener('submit',async(e)=>{
         console.log("userdata:",userData);        
         const jsonData = JSON.stringify(userData);
         const encodedData = encodeURIComponent(jsonData);
-        const queryParams = new URLSearchParams({ data: encodedData,count:count }).toString();
+        const queryParams = new URLSearchParams({ data: encodedData,count:count,dofjourney:dateofjourney }).toString();
         window.location.href = `/paymentPage?${queryParams}`;
     
     

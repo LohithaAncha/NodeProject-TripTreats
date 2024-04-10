@@ -6,6 +6,15 @@ const { sendMailtoUser } = require('../services/mail');
 const axios = require('axios');
 const { default: mongoose } = require('mongoose');
 const Razorpay=require('razorpay');
+const booking=require('../models/bookings');
+const { v4: uuidv4 } = require('uuid');
+
+
+
+
+
+// Generate a UUID
+// Output: a12b5b18-7d9b-4ad0-ba70-6ecab33f088b (Example UUID)
 
 let razorpay = new Razorpay({
     key_id: process.env.key_id,
@@ -87,6 +96,8 @@ const bookflight=async (req, res) => {
     
     const src = req.params.src;
     const des = req.params.des;
+    const doj=req.params.date
+    console.log("date",doj)
    const count=parseInt(req.params.id.charAt(0));
    const fnum=parseInt(req.params.id.slice(1))
             
@@ -95,7 +106,7 @@ const bookflight=async (req, res) => {
            // console.log(req.user.id)
             const USER = await user.findOne({_id:userId});
             const Flight = await flight.findOne({flightNumber:fnum, Source : src, Destination : des});      
-            res.render('bookflight',{USER:USER,Flight:Flight, data : req.user.user,count:count});
+            res.render('bookflight',{USER:USER,Flight:Flight, data : req.user.user,count:count,dateofjourney:doj});
     
 }
 
@@ -114,19 +125,36 @@ const viewflights=async (req,res)=>{
 
 
 //p
-const showticket=async (req,res)=>{    
+const showticket=async (req,res)=>{   
+    //console.log('here1', req.query);
+            
             try {
+                const uuid = uuidv4();
+
+            //console.log(uuid); 
             const userData = await user.findOne({_id : req.user.id});
            // console.log("query:",req.query.data)
             const jsonData = req.query.data;
+            const jsonDate=req.query.doj;
+           // console.log("test date:",jsonDate)
             let decode = decodeURIComponent(jsonData);
             decode=JSON.parse(decode);
-            console.log("decode",decode)
+            //console.log("decode",decode)
+            
+            const flightinfo=await flight.findOne({flightNumber:decode[0].Fid,Source:decode[0].fsrc,Destination:decode[0].fdes});
+           // console.log("flight:",flightinfo)
+            
+            const userid=req.user.id;
+            const flightid=flightinfo._id;
+            const nums=decode.length;
 
-            const flightinfo=await flight.findOne({flightNumber:decode[0].Fid,Source:decode[0].fsrc,Destination:decode[0].fdeso});
-            console.log("flight:",flightinfo)
+            // Define parameters for generating signed URL
+            
+           
+            const newbooking=await booking.create({userId:userid,flightId:flightid,numberOfPassengers:nums,dateOfJourney:jsonDate,uuid:uuid})
+           // console.log("new booking:",newbooking);
             sendMailtoUser(userData.email, {decode, flightinfo});
-            res.render("test",{decode,flightinfo,data : req.user.user, userProfile : userData.name});   
+            res.render("test",{decode,flightinfo,data : req.user.user, userProfile : userData.name,uuid:uuid});   
             } catch (error) {
                 console.log(error)
             }
@@ -194,6 +222,12 @@ const search= async (req, res) => {
     }
 }
 
+//------------------
+//not done
+const getProfileEdit=(req,res)=>{
+    
+    res.render('editProfile',{data:req.user.user});
+}
 //-----------------------------------------------------------------------------
 
 
@@ -328,4 +362,5 @@ const sendwebhook=async (req, res) => {
 
 module.exports={handlelogin,handleRegister,homepage,handleLogout,addflight,bookflight,viewflights,showticket,getabout,
                 getPaymentpage,getProfile,search,
-                createUser,addloggedinUser,createFlight,findflight,createPassenger,createPaymentOrder,sendwebhook,razorpay,handleIndex}
+                createUser,addloggedinUser,createFlight,findflight,createPassenger,createPaymentOrder,sendwebhook,razorpay,handleIndex,
+            getProfileEdit}

@@ -3,6 +3,11 @@
 document.addEventListener('DOMContentLoaded', async () => {
     const urlParams = new URLSearchParams(window.location.search);
     const encodedData = urlParams.get('data');
+    const encodedDate=urlParams.get('dateofjourney');
+    console.log("date before:",encodedDate);
+    const decodedDate=decodeURIComponent(encodedDate);
+    const doj=JSON.parse(decodedDate);
+    console.log("After date:",doj)
     const decodedData = decodeURIComponent(encodedData);
     const dataReceived = JSON.parse(decodedData);
     // console.log('Received Data:Data', dataReceived , "flightid: ", dataReceived[0].Fid);
