@@ -8,6 +8,15 @@ const { default: mongoose } = require('mongoose');
 const Razorpay=require('razorpay');
 const booking=require('../models/bookings');
 const { v4: uuidv4 } = require('uuid');
+const bookings=require("../models/bookings")
+const AWS = require('aws-sdk');
+
+// Configure AWS SDK
+const s3 = new AWS.S3({
+  accessKeyId: process.env.aws_access_key,
+  secretAccessKey: process.env.aws_secret_key,
+  region: 'ap-south-1'
+});
 
 
 
@@ -143,15 +152,17 @@ const showticket=async (req,res)=>{
             
             const flightinfo=await flight.findOne({flightNumber:decode[0].Fid,Source:decode[0].fsrc,Destination:decode[0].fdes});
            // console.log("flight:",flightinfo)
-            
             const userid=req.user.id;
+            const userInfo=await user.findById(userid);
+            const phone=userInfo.phone;
+            console.log("User:",userInfo)
             const flightid=flightinfo._id;
             const nums=decode.length;
 
             // Define parameters for generating signed URL
             
            
-            const newbooking=await booking.create({userId:userid,flightId:flightid,numberOfPassengers:nums,dateOfJourney:jsonDate,uuid:uuid})
+            const newbooking=await booking.create({userId:userid,flightId:flightid,numberOfPassengers:nums,dateOfJourney:jsonDate,uuid:uuid,contactinfo:phone})
            // console.log("new booking:",newbooking);
             sendMailtoUser(userData.email, {decode, flightinfo});
             res.render("test",{decode,flightinfo,data : req.user.user, userProfile : userData.name,uuid:uuid});   
@@ -194,7 +205,7 @@ const getProfile=async (req,res)=>{
 //Not done
 const search= async (req, res) => {
     try {
-        db = await mongoose.connection.db.collection('flights_infos')
+         db = await mongoose.connection.db.collection('flights_infos')
         const data = await db.aggregate([
             {
                 "$search": {
@@ -228,6 +239,60 @@ const getProfileEdit=(req,res)=>{
     
     res.render('editProfile',{data:req.user.user});
 }
+
+const getBookings=async(req,res)=>{
+    const userid=req.user.id;
+    const bookinginfo=await bookings.find({userId:userid})
+    //console.log("found booking:",booking);
+    const currentDate=new Date();
+    const previousbookings=[];
+    const upcomingflights=[];
+    const flightsprevious=[];
+    const flightsupcoming=[];
+    for (const booking of bookinginfo) {
+     const date = new Date(booking.dateOfJourney);
+     const params = {
+         Bucket: 'triptreats',
+         Key: booking.uuid, 
+     };
+     const signedUrl = s3.getSignedUrl('getObject', params);
+     // console.log(booking.uuid)
+     booking.uuid = signedUrl;
+     //console.log(booking.uuid, signedUrl)
+     if (date < currentDate) {
+         previousbookings.push(booking);
+         const flightId = booking.flightId;       
+         const flightInfo = await flight.findById(flightId);       
+         flightsprevious.push(flightInfo);
+     }
+     else{
+         upcomingflights.push(booking);
+         const flightId = booking.flightId;       
+         const flightInfo = await flight.findById(flightId);       
+         flightsupcoming.push(flightInfo);
+     } 
+ }
+ 
+ 
+ 
+ //    previousbookings.sort((a,b)=>new Date(b.dateOfJourney)-new Date(a.dateOfJourney));
+ //    upcomingflights.sort((a,b)=>new Date(a.dateOfJourney)-new Date(b.dateOfJourney))
+ //     console.log("previous:",previousbookings);
+ //    console.log("upcoming:",upcomingflights)
+ 
+    res.render("bookings",{previousbookings:previousbookings,upcomingflights:upcomingflights,data:req.user.user,flightsprevious:flightsprevious,flightsupcoming:flightsupcoming});
+ 
+ }
+ const getBookingEdit=async(req,res)=>{
+    const id=req.params.id;
+    const booking=await bookings.findById(id);
+    //console.log("Booking:",booking)
+    const userInfo=await user.findById(booking.userId);
+    const flightInfo=await flight.findById(booking.flightId);
+    // console.log("user:",userInfo)
+    // console.log("flight:",flightInfo)
+    res.render("editBooking",{data:req.user.user,user:userInfo,flight:flightInfo,booking:booking});
+  }
 //-----------------------------------------------------------------------------
 
 
@@ -256,6 +321,11 @@ const addloggedinUser=async(req,res)=>{
     const {email,password}=req.body;
     try {
         const data=await user.login(email,password);
+        if(data=="Password not matched"){
+            return res.json({data});
+        } else if (data == "Email not matched") {
+            return res.json({data});
+        }
         const token=CreateToken(data._id, (data.admin === true ? "admin" : "user"));
         res.cookie('jwt',token,{httpOnly:true,maxAge:24*60*60*1000});
         res.status(200).json({message:"logged"});
@@ -359,8 +429,83 @@ const sendwebhook=async (req, res) => {
     res.status(200).send('Webhook received');
 }
 
+const postProfileChanges=async (req, res) => {
+    try {
+        const { name, age, gender, email, phone } = req.body;
+        const id = req.user.id; 
+        let user1 = await user.findById(id);
+        if (!user1) {
+            return res.status(404).send('User not found');
+        }
+        user1.name = name;
+        user1.age = age;
+        user1.gender = gender;
+        user1.email = email;
+        user1.phone = phone;
+        // console.log("before",user1)
+        await user1.save();
+        // console.log("after",user1)
+        // return res.render('profile',{data:req.user.user,user:user1})
+        return res.redirect('/profile');
+    } catch (error) {
+        res.send('Error updating user details');
+    }
+}
 
+
+const deleteProfile=async(req,res)=>{
+    try {
+        const id=req.user.id;
+        let user1=await user.findById(id);
+        if(!user1){
+            return res.status(404).send("User not found");
+        }
+        
+        const deleted=await user.findByIdAndDelete(id);
+        res.cookie('jwt','',{maxAge: 1});
+        res.sendStatus(204); 
+    } catch (error) {
+        
+        res.status(500).send('Error deleting user details');
+    }
+
+}
+
+const postBookingChanges=async(req,res)=>{
+    try{
+      const {userId,bookingId,flightId,source,destination,dateOfJourney,phoneNumber,email,numberOfPassengers}=req.body;
+      const booking=await bookings.findById(req.params.id);
+      if(!booking){
+        return res.status(404).send("Booking not found");
+      }
+      booking.userId=userId;
+      booking.flightId=flightId;    
+      booking.contactinfo=phoneNumber;
+      booking.numberOfPassengers=numberOfPassengers;
+      booking.dateOfJourney=dateOfJourney;
+     await booking.save();
+      return res.redirect('/bookings');
+    }catch (error) {
+      res.send("Error updating booking details");
+  }
+  }
+//p
+const deletebooking=async(req,res)=>{
+    try{
+      const id=req.params.id;
+      let booking=await bookings.findById(id);
+      if(!booking){
+        return res.status(404).send("Booking not found");
+      }
+      const deleted=await bookings.findByIdAndDelete(id);
+      res.redirect('/home') 
+    }
+    catch(error){
+      res.status(500).send("Error cancelling the booking")
+    }
+  }
 module.exports={handlelogin,handleRegister,homepage,handleLogout,addflight,bookflight,viewflights,showticket,getabout,
                 getPaymentpage,getProfile,search,
                 createUser,addloggedinUser,createFlight,findflight,createPassenger,createPaymentOrder,sendwebhook,razorpay,handleIndex,
-            getProfileEdit}
+            getProfileEdit,getBookings,postProfileChanges,deleteProfile,s3,getBookingEdit,
+            postBookingChanges,deletebooking}

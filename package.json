@@ -6,7 +6,8 @@
   "scripts": {
     "test": "mocha ./testing/*.spec.js --timeout 8000 --exit",
     "dev": "nodemon server.js",
-    "coverage": "nyc --reporter=html --reporter=text mocha testing/*.spec.js --timeout 5000 --exit"
+    "coverage": "nyc --reporter=html --reporter=text mocha testing/*.spec.js --timeout 5000 --exit",
+    "build:css" : "npx tailwindcss -i ./public/css/tailwind.css -o ./public/css/output.css --watch"
   },
   "keywords": [],
   "author": "",
@@ -44,6 +45,7 @@
     "rewire": "^7.0.0",
     "sinon": "^17.0.1",
     "sinon-chai": "^3.7.0",
-    "supertest": "^6.3.4"
+    "supertest": "^6.3.4",
+    "tailwindcss": "^3.4.3"
   }
 }

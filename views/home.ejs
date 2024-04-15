@@ -5,10 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TripTreats</title>
     <link rel="stylesheet" href="/static/css/home.css">
-    <link rel="stylesheet" href="/static/css/test.css">
+    <!-- <link rel="stylesheet" href="/static/css/test.css"> -->
+    <link rel="stylesheet" href="/static/css/output.css">
 
     <style>
-        .dropbtn {
+        /* .dropbtn {
           background-color: #04AA6D;
           color: white;
           padding: 16px;
@@ -31,7 +32,7 @@
         
         #myInput:focus {outline: 3px solid #ddd;} */
         
-        .dropdown1 {
+        /*.dropdown1 {
           position: relative;
           display: inline-block;
         }
@@ -55,7 +56,7 @@
         
         .dropdown1 a:hover {background-color: #ddd;}
         
-        .show {display: block;}
+        .show {display: block;} */
         </style>
 
 </head>
@@ -66,7 +67,7 @@
     <section class="section">
     <h1 class="user">Hello, <%= USER.name.toUpperCase() %></h1>
     
-    <div id="search-form" class="search-form">
+    <!-- <div id="search-form" class="search-form">
       <form>
           <!-- <input class='input' type="text" name="source" id="src" placeholder="Enter Source">
           <div>
@@ -78,7 +79,7 @@
             <option selected>Search Source</option>
           </select> -->
           
-          <div id="myDropdown" class="dropdown-content">
+          <!-- <div id="myDropdown" class="dropdown-content">
             <input type="text" placeholder="Enter Source" class="input" id="myInput" autocomplete="off"  name='source' onkeyup="filterFunction()">
            <div id="dropdownmenu">
            </div>
@@ -92,7 +93,47 @@
           <input class="input" type="number" name="passenger" min='0' placeholder="Enter number of passengers">
           <input  class='input' type="date" name="tripdate"><button type="submit">Search</button>
       </form>
-  </div>  
+  </div>   -->
+
+  <!-- <div id="search-form" class="">
+    <form>
+        <div id="myDropdown" class="">
+          <input type="text" placeholder="Enter Source" class="" id="myInput" autocomplete="off"  name='source' onkeyup="filterFunction()">
+         <div id="dropdownmenu">
+         </div>
+
+        </div>
+      <div id="destdropdown" class="">
+          <input class='' type="text" name="destination" placeholder="Enter Destination" autocomplete="off" id="destinput" onkeyup="filterFunction()">
+         <div id="destdropdownmenu" class=""></div>
+      </div>
+
+        <input class="" type="number" name="passenger" min='0' placeholder="Enter number of passengers">
+        <input  class='' type="date" name="tripdate"><button type="submit">Search</button>
+    </form>
+</div>   -->
+
+<div class="bg-white w-[70%] rounded-3xl p-5">
+  <form action="" class="flex flex-row border border-gray-400 rounded-lg">
+    <div id="myDropdown" class="px-5 py-4 border-r border-gray-400 flex-grow">
+      <p>From</p>
+      <input type="text" id="myInput" autocomplete="off"  name='source' onkeyup="filterFunction()" value="Hyderabad" class="text-4xl font-semibold focus:outline-none   selection:border-none selection:outline-none  w-52">
+      <div id="dropdownmenu"></div>
+    </div>
+    <div class="px-5 py-4 border-r border-gray-400 flex-grow">
+      <p>To</p>
+      <input type="text" name="" id="" value="Bengaluru" class="text-4xl font-semibold focus:outline-none  selection:border-none selection:outline-none w-52">
+    </div>
+    <div class="px-5 py-4 border-r border-gray-400 flex-grow" >
+      <p>Departure</p>
+      <input type="date" name="" id="" class="text-4xl font-semibold focus:outline-none  selection:border-none selection:outline-none w-64">
+    </div>
+    <div class="px-5 py-4 flex-grow">
+      <p>No of Travellers</p>
+      <input type="number" value="1" class="text-4xl font-semibold focus:outline-none  selection:border-none selection:outline-none w-52">
+    </div>
+  </form>
+</div>
 
     <div id="flights"></div>
 

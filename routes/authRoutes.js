@@ -8,7 +8,7 @@ const Passenger=require('../models/passenger');
 const Razorpay=require('razorpay');
 const { sendMailtoUser } = require('../services/mail');
 const bookings=require('../models/bookings')
-const { handlelogin, handleRegister, homepage, handleLogout, addflight, bookflight, viewflights, showticket, getabout,getPaymentpage, getProfile, search, createUser, addloggedinUser, createFlight, findflight, createPassenger, createPaymentOrder, sendwebhook, getProfileEdit } = require('../controllers/authcontrollers');
+const { handlelogin, handleRegister, homepage, handleLogout, addflight, bookflight, viewflights, showticket, getabout,getPaymentpage, getProfile, search, createUser, addloggedinUser, createFlight, findflight, createPassenger, createPaymentOrder, sendwebhook, getProfileEdit, getBookings, postProfileChanges, deleteProfile, getBookingEdit, postBookingChanges, deletebooking } = require('../controllers/authcontrollers');
 
 var razorpay = new Razorpay({
     key_id: process.env.key_id,
@@ -105,90 +105,15 @@ const { default: mongoose, deleteModel } = require('mongoose');
 
 router.get('/profile/edit',requireauth,getProfileEdit)
 
-router.post('/profile/edit', requireauth, async (req, res) => {
-    try {
-        const { name, age, gender, email, phone } = req.body;
-        const id = req.user.id; 
-        let user1 = await user.findById(id);
-        if (!user1) {
-            return res.status(404).send('User not found');
-        }
-        user1.name = name;
-        user1.age = age;
-        user1.gender = gender;
-        user1.email = email;
-        user1.phone = phone;
-        user1 = await user1.save();
-        const updatedUser=await user.findById(id);
-        res.render('profile',{data:req.user.user,user:updatedUser})
-    } catch (error) {
-        console.error('Error updating user details:', error);
-        res.status(500).send('Error updating user details');
-    }
-});
+router.post('/profile/edit', requireauth, postProfileChanges);
 
-router.post ('/profile/delete',requireauth,async(req,res)=>{
-        try {
-            const id=req.user.id;
-            let user1=await user.findById(id);
-            if(!user1){
-                return res.status(404).send("User not found");
-            }
-            
-            const deleted=await user.findByIdAndDelete(id);
-            res.cookie('jwt','',{maxAge: 1});
-            res.sendStatus(204); 
-        } catch (error) {
-            console.error('Error deleting user details:', error);
-            res.status(500).send('Error deleting user details');
-        }
-    
+router.post ('/profile/delete',requireauth,deleteProfile)
 
-})
+router.get('/bookings',requireauth,getBookings)
 
-router.get('/bookings',requireauth,async(req,res)=>{
-   const userid=req.user.id;
-   const bookinginfo=await bookings.find({userId:userid})
-   //console.log("found booking:",booking);
-   const currentDate=new Date();
-   const previousbookings=[];
-   const upcomingflights=[];
-   const flightsprevious=[];
-   const flightsupcoming=[];
-   for (const booking of bookinginfo) {
-    const date = new Date(booking.dateOfJourney);
-    const params = {
-        Bucket: 'triptreats',
-        Key: booking.uuid, 
-    };
-    const signedUrl = s3.getSignedUrl('getObject', params);
-    console.log(booking.uuid)
-    booking.uuid = signedUrl;
-    console.log(booking.uuid, signedUrl)
-    if (date < currentDate) {
-        previousbookings.push(booking);
-        const flightId = booking.flightId;       
-        const flightInfo = await flight.findById(flightId);       
-        flightsprevious.push(flightInfo);
-    }
-    else{
-        upcomingflights.push(booking);
-        const flightId = booking.flightId;       
-        const flightInfo = await flight.findById(flightId);       
-        flightsupcoming.push(flightInfo);
-    } 
-}
+router.get('/bookings/edit/:id',requireauth,getBookingEdit)
 
+router.post('/bookings/edit/:id',requireauth,postBookingChanges);
 
-
-//    previousbookings.sort((a,b)=>new Date(b.dateOfJourney)-new Date(a.dateOfJourney));
-//    upcomingflights.sort((a,b)=>new Date(a.dateOfJourney)-new Date(b.dateOfJourney))
-//     console.log("previous:",previousbookings);
-//    console.log("upcoming:",upcomingflights)
-
-   res.render("bookings",{previousbookings:previousbookings,upcomingflights:upcomingflights,data:req.user.user,flightsprevious:flightsprevious,flightsupcoming:flightsupcoming});
-
-})
-
-
+router.get('/bookings/delete/:id',requireauth,deletebooking);
 module.exports=router

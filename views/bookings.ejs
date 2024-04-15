@@ -35,30 +35,19 @@
                                 <p><%= upcoming[i].dateOfJourney%></p>
                             </div>
                         </div>
-                        <div class="viewBtnDiv">
-                           <button><a href= <%= upcoming[i].uuid %>> view </a></button> 
+                        <div class="buttons">
+                            <div class="viewBtnDiv">
+                               <button><a href= <%= upcoming[i].uuid %> target="_blank"> View Ticket   </a></button> 
+                            </div>
+                            <div class="editBtnDiv">
+                                <button><a href= "/bookings/edit/<%= upcoming[i]._id%>"> Edit Ticket   </a></button> 
+                            </div>
+                            <div class="deleteBtnDiv" id="<%= upcoming[i]._id%>">
+                                <button onclick="alert('Are you sure, you want to cancel the booking!!')"><a href= "/bookings/delete/<%= upcoming[i]._id%>"> Cancel Ticket   </a></button> 
+                            </div>
                         </div>
                     </div>
-                    <!-- <div class="eachupcoming">
-                      <p>Date of Journey:</p>
-                      <h3><%= upcoming[i].dateOfJourney %></h3>
-                    </div>
-                    <div class="eachupcoming">
-                      <p>Source</p>
-                      <h3><%= flightsup[i].Source%></h3>
-                    </div>
-                    <div class="eachupcoming">
-                      <p>Destination</p>
-                      <h3><%= flightsup[i].Destination %></h3>
-                    </div>
-                    <div class="eachupcoming">
-                      <p>Number of Passengers</p>
-                      <h3><%= upcoming[i].numberOfPassengers %></h3>
-                    </div>
-                    <div class="eachupcoming">
-                      <p>Flight Name</p>
-                      <h3><%= flightsup[i].Airline%></h3>
-                    </div> -->
+                   
                   <%} %>
             </div>
             <h1>Previous Bookings</h1>
@@ -80,8 +69,10 @@
                                 <p><%= previous[i].dateOfJourney %></p>
                             </div>
                         </div>
-                        <div class="viewBtnDiv">
-                            <button>view</button>
+                        <div>
+                            <div class="viewBtnDiv">
+                                <button><a href= <%= previous[i].uuid %> target="_blank"> View Ticket </a></button>
+                            </div>
                         </div>
                     </div>
                 <%} %>
@@ -91,5 +82,12 @@
     </section>
     
     <%- include("footer.ejs")%>
+    <script >
+        let prebookings=<%- JSON.stringify(previousbookings) %>;
+        let upbookings=<%- JSON.stringify(upcomingflights) %>;
+        let preflights=<%- JSON.stringify(flightsprevious) %>;
+        let upflights=<%- JSON.stringify(flightsupcoming) %>
+        </script>
+        <script src="/static/js/bookings.js"></script>
 </body>
 </html>

@@ -54,7 +54,45 @@
 }
 
 .viewBtnDiv > button {
-    padding: 10px 20px;
+    padding: 10px 10px;
+    font-size: large;
+    font-weight: bold;
+}
+.viewBtnDiv >button >a{
+    margin-right: 0px;
+}
+
+.viewBtnDiv >button >a:visited{
+    color: blue;
+}
+
+.viewBtnDiv >button >a:hover{
+    color: black;
+}
+.editBtnDiv {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.editBtnDiv > button {
+    padding: 10px 10px;
+    font-size: large;
+    font-weight: bold;
+}
+.buttons{
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+}
+.deleteBtnDiv {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.deleteBtnDiv > button {
+    padding: 10px 10px;
     font-size: large;
     font-weight: bold;
 }

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Booking</title>
+    <link rel="stylesheet" href="/static/css/home.css">
+    <link rel="stylesheet" href="/static/css/editBooking.css">
+</head>
+<body>
+    <%- include("header.ejs")%>
+    <section class="section">
+    <h1>Edit Booking</h1>
+    <form class="edit-form" action="/bookings/edit/<%= booking._id %>" method="POST">
+        <!-- <div class="box">
+            <label for="userId">User ID:</label>
+            <input type="text" id="userId" name="userId" value="<%= booking.userId %>" readonly>
+        </div>
+        <div class="box">
+            <label for="bookingId">Booking ID:</label>
+            <input type="text" id="bookingId" name="bookingId" value="<%= booking._id %>" readonly>
+        </div>
+        <div class="box">
+            <label for="flightId">Flight ID:</label>
+            <input type="text" id="flightId" name="flightId" value="<%= booking.flightId %>" readonly>
+        </div> -->
+        <div class="box">
+            <label for="source">Source:</label>
+            <input type="text" id="source" name="source" value="<%= flight.Source %>" readonly>
+        </div>
+        <div class="box">
+            <label for="destination">Destination:</label>
+            <input type="text" id="destination" name="destination" value="<%= flight.Destination %>" readonly>
+        </div>
+        <div class="box">
+            <label for="dateOfJourney">Date of Journey:</label>
+            <input type="date" id="dateOfJourney" name="dateOfJourney" value="<%= booking.dateOfJourney.toISOString().substr(0, 10) %>" required>
+        </div>
+        <div class="box">
+            <label for="phoneNumber">Phone Number:</label>
+            <input type="text" id="phoneNumber" name="phoneNumber" value="<%= booking.contactinfo %>" required>
+        </div>
+        <div class="box">
+            <label for="email">Email Address:</label>
+            <input type="email" id="email" name="email" value="<%= user.email %>" required>
+        </div>
+        <div class="box">
+            <label for="numberOfPassengers">Number of Passengers:</label>
+            <input type="number" id="numberOfPassengers" name="numberOfPassengers" value="<%= booking.numberOfPassengers %>" readonly>
+        </div>
+        <button type="submit">Save Changes</button>
+    </form>
+   </section>
+   <%- include("footer.ejs") %>
+   <script>
+    const date = '<%= booking.dateOfJourney %>'
+    console.log(date)
+   </script>
+</body>
+</html>

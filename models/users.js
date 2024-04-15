@@ -53,9 +53,9 @@ userSchema.statics.login=async function(email,password){
         if(auth){
             return user;
         }
-        throw Error("Password not matched")
+        return "Password not matched"
     }
-    throw Error("Email not matched");
+    return "Email not matched";
 }
 
 const user=mongoose.model("user",userSchema);

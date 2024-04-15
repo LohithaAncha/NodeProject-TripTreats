@@ -11,8 +11,12 @@ body {
     margin: 0;
     padding: 0;
     color: black;
-    background-image: linear-gradient(to right top, #fbeaff, #ededff, #dcf2ff, #ccf7ff, #c3faff, #c3faff, #c3faff, #c3faff, #ccf7ff, #dcf2ff, #ededff, #fbeaff);
-    
+    /* background-image: linear-gradient(to right top, #fbeaff, #ededff, #dcf2ff, #ccf7ff, #c3faff, #c3faff, #c3faff, #c3faff, #ccf7ff, #dcf2ff, #ededff, #fbeaff);
+     */
+     background-color: white;
+     background-image: url("https://images.unsplash.com/photo-1436491865332-7a61a109cc05?ixlib=rb-4.0.3");
+     background-repeat: no-repeat;
+     background-size: cover;
 }
 
 .hidden {
@@ -38,7 +42,7 @@ header .nav a h4 {
 }
  
 .search-form {
-    margin-top: 10%;
+    margin-top: 5%;
     background: rgba( 255, 255, 255, 0.1 );
     box-shadow: 0 8px 10px 0 rgba( 31, 38, 135, 0.37 );
     backdrop-filter: blur( 3.5px );
@@ -53,7 +57,7 @@ header .nav a h4 {
 .search-form input[type="date"],
 .search-form input[type="number"] {
     width: 100%;
-    padding: 15px 10px;
+    padding: 30px 20px;
     margin-bottom: 15px;
     border: 1px solid #ccc;
     border-radius: 5px;

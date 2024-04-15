@@ -23,6 +23,10 @@ const bookingSchema = new mongoose.Schema({
     uuid:{
         type:String,
         required:true
+    },
+    contactinfo:{
+        type:String,
+        required:true
     }
     
 });
